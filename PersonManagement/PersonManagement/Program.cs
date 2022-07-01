@@ -5,6 +5,7 @@ namespace PersonManagement
 {
     internal class Program
     {
+        public static List<Person> Persons { get; set; } = new List<Person>();
         static void Main(string[] args)
         {
             List<Person> persons = new List<Person>();
@@ -33,8 +34,7 @@ namespace PersonManagement
                     Console.Write("Please add person's FIN code :");
                     string fin = Console.ReadLine();
 
-                    Person person = new Person(name, lastName, fin);
-                    persons.Add(person);
+                    Person person = AddNewPerson(name, lastName, fin);
 
                     Console.WriteLine(person.GetInfo() + " - Added to system.");
 
@@ -64,12 +64,11 @@ namespace PersonManagement
                 }
                 else if (command == "/remove-all-persons")
                 {
-                    Console.Write("To remove all persons");
                     for (int i = 0; i <= persons.Count; i++)
                     {
                         persons.RemoveAt(0);
                     }
-                        Console.WriteLine("All persons removed successfully");
+                    Console.WriteLine("All persons removed successfully");
                 }
                 else if (command == "/exit")
                 {
@@ -83,7 +82,15 @@ namespace PersonManagement
                 }
             }
         }
+        public static Person AddNewPerson(string name, string lastname, string fin)
+        {
+            Person person = new Person(name, lastname, fin);
+            Persons.Add(person);
+            return person;
+        }
+        
     }
+
 
     class Person
     {
