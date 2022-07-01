@@ -8,11 +8,11 @@ namespace PersonManagement
         public static List<Person> Persons { get; set; } = new List<Person>();
         static void Main(string[] args)
         {
-            List<Person> persons = new List<Person>();
 
             Console.WriteLine("Our available commands :");
             Console.WriteLine("/add-new-person");
-            Console.WriteLine("/remove-person");
+            Console.WriteLine("/remove-person-by-fin");
+            Console.WriteLine("/remove-person-by-id");
             Console.WriteLine("/show-persons");
             Console.WriteLine("/remove-all-persons");
             Console.WriteLine("/exit");
@@ -39,16 +39,31 @@ namespace PersonManagement
                     Console.WriteLine(person.GetInfo() + " - Added to system.");
 
                 }
-                else if (command == "/remove-person")
+                else if (command == "/remove-person-by-fin")
                 {
                     Console.Write("To remove person, please enter his/her FIN code : ");
                     string fin = Console.ReadLine();
-                    for (int i = 0; i < persons.Count; i++)
+                    for (int i = 0; i < Persons.Count; i++)
                     {
-                        if (persons[i].FIN == fin)
+                        if (Persons[i].FIN == fin)
                         {
-                            Console.WriteLine(persons[i].GetInfo());
-                            persons.RemoveAt(i);
+                            Console.WriteLine(Persons[i].GetInfo());
+                            Persons.RemoveAt(i);
+                            Console.WriteLine("Person removed successfully");
+                        }
+                    }
+
+                }
+                else if (command == "/remove-person-by-id")
+                {
+                    Console.Write("To remove person, please enter his/her ID code : ");
+                    uint id = Convert.ToUInt32(Console.ReadLine());
+                    for (int i = 0; i < Persons.Count; i++)
+                    {
+                        if (Persons[i].Id == id)
+                        {
+                            Console.WriteLine(Persons[i].GetInfo());
+                            Persons.RemoveAt(i);
                             Console.WriteLine("Person removed successfully");
                         }
                     }
@@ -57,16 +72,16 @@ namespace PersonManagement
                 else if (command == "/show-persons")
                 {
                     Console.WriteLine("Persons in database : ");
-                    foreach (Person person in persons)
+                    foreach (Person person in Persons)
                     {
                         Console.WriteLine(person.GetInfo());
                     }
                 }
                 else if (command == "/remove-all-persons")
                 {
-                    for (int i = 0; i <= persons.Count; i++)
+                    for (int i = 0; i <= Persons.Count; i++)
                     {
-                        persons.RemoveAt(0);
+                        Persons.RemoveAt(0);
                     }
                     Console.WriteLine("All persons removed successfully");
                 }
@@ -94,15 +109,21 @@ namespace PersonManagement
 
     class Person
     {
+        public static uint currentIdCount = 1;
+        
+        public uint Id { get; private set; } 
         public string Name { get; set; }
         public string LastName { get; set; }
         public string FIN { get; set; }
 
         public Person(string name, string lastName, string fin)
         {
+            Id = currentIdCount;
             Name = name;
             LastName = lastName;
             FIN = fin;
+
+            currentIdCount++;
         }
 
         public string GetFullName()
@@ -112,7 +133,7 @@ namespace PersonManagement
 
         public string GetInfo()
         {
-            return Name + " " + LastName + " " + FIN;
+            return Id + " " + Name + " " + LastName + " " + FIN;
         }
     }
 }
